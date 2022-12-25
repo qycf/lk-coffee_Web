@@ -22,16 +22,13 @@
 </template>
 
 <script lang='ts' setup>
-import { computed, reactive, ref, watch, watchEffect } from 'vue';
-import { sendRegisterCode, sendLoginCode } from '@/api/sms';
+import {  ref } from 'vue';
 import { showNotify } from 'vant';
 import 'vant/es/notify/style';
-import { login, loginWithPw, loginWithTel, register } from '@/api/user';
+import { loginWithPw, loginWithTel, register } from '@/api/user';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
 import BizForm from './components/BizForm.vue';
-import { getUserAddress } from '@/api/address';
-import { lutimesSync } from 'fs';
 
 const userStore = useUserStore()
 

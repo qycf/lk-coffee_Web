@@ -46,6 +46,10 @@ const routes = [
             component: () => import("@/pages/Account/Profile.vue"),
           },
           {
+            path: "like",
+            component: () => import("@/pages/Account/Like.vue"),
+          },
+          {
             path: "goodsmanage",
             component: () => import("@/pages/admin/GoodsManage.vue"),
           },

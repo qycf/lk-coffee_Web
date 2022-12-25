@@ -4,7 +4,6 @@ export const useAddressStore = defineStore("address", {
   state: () => {
     return {
       user_address: [] as address[],
-      default_address: {} as address,
       select_address: {
         addressDetail: "",
         id: 0,
@@ -12,9 +11,8 @@ export const useAddressStore = defineStore("address", {
     };
   },
   actions: {
-    setAddress(addressList: address[], default_address: address) {
+    setAddress(addressList: address[]) {
       this.user_address = addressList;
-      this.default_address = default_address;
     },
     deleteAddress(address_id: number) {
       this.user_address = this.user_address.filter(
@@ -28,7 +26,7 @@ export const useAddressStore = defineStore("address", {
   },
   persist: [
     {
-      paths: ["user_address", "default_address"],
+      paths: ["user_address"],
       storage: sessionStorage,
     },
   ],

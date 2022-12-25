@@ -74,9 +74,8 @@ const add_cart = (item: any) => {
     router.push({ path: '/detail/' + item.id })
 }
 
-const onCancel = () => {
-    router.push('/menu')
-};
+const onCancel = () => history.back()
+
 
 onMounted(() => {
     if (keyword.value) {

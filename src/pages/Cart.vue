@@ -36,12 +36,11 @@
     </van-col>
 
     <van-col>
-
       <van-submit-bar class=" mb-16 bg-black" :price="(totalPrice * 100)" :disabled="disabled" button-text="提交订单"
         @submit="onSubmit">
         <template #tip>
           当前收获地址为 <span class=" text-black">{{ addressStore.select_address.addressDetail ||
-              addressStore.default_address.address
+              addressStore.user_address[0].address
           }}</span>, <span class=" text-blue-500" @click="onClickLink">点击修改</span>
         </template>
       </van-submit-bar>
@@ -80,6 +79,7 @@ const delete_good = (id: number) => {
 }
 
 const onSubmit = () => {
+  console.log( addressStore.select_address.id);
   let cart_order = ref([] as any)
   if (!useUserStore().token) {
     showNotify({ type: 'danger', message: '请先登录' });
@@ -89,15 +89,16 @@ const onSubmit = () => {
     }, 1500);
     return
   }
-  let order_id = createordernum()
+  let order_id = createordernum();
+  // 订单列表
   let order_goods = ref([] as any)
   cartStore.cart_list.forEach((item) => {
     let { id, count, cup, sugar, temperature } = item
     order_goods.value.push({ order_id, goods_id: id, count, cup, sugar, temperature })
   })
   cart_order.value = {
-    order_id: order_id,
-    address_id: addressStore.select_address.id,
+    order_id,
+    address_id: addressStore.select_address.id|addressStore.user_address[0].id,
     goods_list: order_goods.value,
     user_order: {
       order_id: order_id,
@@ -108,6 +109,7 @@ const onSubmit = () => {
       address_id: addressStore.select_address.id
     }
   }
+console.log("cart_order.value",cart_order.value);
 
   putUserOrder(cart_order.value).then(res => {
     if (res.data.code != 200) {

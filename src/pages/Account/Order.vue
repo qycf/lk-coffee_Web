@@ -1,8 +1,8 @@
 <template >
     <van-nav-bar fixed title="所有订单" left-text="返回" left-arrow @click-left="onClickLeft" />
-
     <div id="order" v-if="order_list">
         <div class="cart_list mt-14">
+            <div data-aos="fade-down">
             <van-cell-group class="group bg-slate-400" inset v-for="(item, key, index) in order_list" :key="index">
                 <van-cell icon="location-o" size="large" title-style="margin:-1px;font-color:black;margin-buttom:5px">
                     <template #title class="ml-4">
@@ -29,6 +29,8 @@
                             <van-row class="mb-4">
                                 <van-col span="15">
                                     {{ item.create_time }}
+                        <div class=" text-xs">单号:{{item.orderId}}</div>
+
                                 </van-col>
                                 <van-col class=" text-black" span="8">合计：{{ getOrderPrice(item.goods_list) }}元</van-col>
                             </van-row>
@@ -37,10 +39,9 @@
                 </van-cell>
             </van-cell-group>
         </div>
+        </div>
     </div>
 
-    <van-empty class="mt-72" :image-size="[190, 170]" image="https://i.328888.xyz/2022/12/22/AsWLq.png"
-        description="啥也没有" />
 
 
 </template>

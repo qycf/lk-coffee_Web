@@ -9,73 +9,52 @@
 
 
     <!-- 菜单左右联动 -->
-    <van-tabs v-model:active="tabsActive">
-        <van-tab title="经典菜单">
-            <div class="menu_detail">
-                <!-- 左侧菜单 -->
-                <div class="menu_list">
-                    <van-sidebar v-model="active" @change="onClcick">
-                        <van-sidebar-item replace v-for="(item, index) in menuList" :key="index" :title="item.title"
-                            :dot="item.dot" :to="item.path" :badge="item.badge" />
-                    </van-sidebar>
-                </div>
-                <!-- 右侧菜单 -->
-                <div id="goodListId" v-if="goods_list">
-                    <Content :goods_list="goods_list" />
-                    <!-- <router-view :key="router.currentRoute.value.fullPath"></router-view> -->
-                </div>
-            </div>
-        </van-tab>
-        <van-tab title="我的喜欢">
-            <Content :goods_list="user_like" />
-        </van-tab>
+    <div class="menu_detail">
+        <!-- 左侧菜单 -->
+        <div class="menu_list">
+            <van-sidebar v-model="(active as any)" @change="onClcick">
+                <van-sidebar-item replace v-for="(item, index) in menuList" :key="index" :title="item.title"
+                    :dot="item.dot" :to="{ path: '/menu', query: { mid: item.id }                                                        }" :badge="item.badge" />
+            </van-sidebar>
+        </div>
+        <!-- 右侧菜单 -->
+        <div id="goodListId" v-if="goods_list">
+            <Content :goods_list="goods_list" />
+            <!-- <router-view :key="router.currentRoute.value.fullPath"></router-view> -->
+        </div>
+    </div>
 
-    </van-tabs>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useMenuStore } from '@/stores/menus';
-import { getGoodsLike, getGoodsListByMenuId, getUserLike } from '@/api/goods';
+import { getGoodsListByMenuId } from '@/api/goods';
 import { getMenuList } from '@/api/menu';
-import { useGoodsStore } from '@/stores/goods';
-import GoodsCard from '@/pages/components/GoodsCard.vue';
-import Goods from '@/pages/Menu/components/Goods.vue';
 import Content from './components/content.vue';
 
 const router = useRouter()
-
 const menuStore = useMenuStore()
 
-const tabsActive = ref(0);
-const active = ref(0);
+const menuList = ref()
 const goods_list = ref()
-const goodsStore = useGoodsStore()
-const user_like = ref()
-const onClcick = async (index: number) => {
-    goods_list.value = await (await getGoodsListByMenuId(index + 1)).data.data;
-    active.value = index;
+const active = ref(router.currentRoute.value.query.mid || 0);
+
+const onClcick = async () => {
+    goods_list.value = await (await getGoodsListByMenuId(active.value as any)).data.data;
 }
 
-const menuList = ref()
-const userLikeList = ref()
-const show = ref(false)
 
 onMounted(async () => {
     if (!menuStore.menu_list.length) {
-        getMenuList().then(res => {
-            menuStore.setMenuList(res.data.data)
-            menuList.value = res.data.data
-        })
+        let res = await getMenuList();
+        menuStore.setMenuList(res.data.data)
+        menuList.value = res.data.data
     } else {
         menuList.value = menuStore.menu_list
     }
-    goods_list.value = await (await getGoodsListByMenuId(1)).data.data;
-    user_like.value = await (await getUserLike()).data.data
-    let res = await getGoodsLike()
-    userLikeList.value = await (await getUserLike()).data.data
-    useGoodsStore().goods_like = res.data.data
+    goods_list.value = await (await getGoodsListByMenuId(active.value as any)).data.data;
 })
 
 </script>

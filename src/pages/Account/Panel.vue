@@ -19,8 +19,9 @@
                             </div>
                         </div>
                     </div>
-                    <van-grid class="my-4" :column-num="2" clickable>
+                    <van-grid class="my-4" :column-num="3" clickable>
                         <van-grid-item to="/account/order" icon-color="#3b82f6" icon="cart-circle" text="我的订单" dot />
+                        <van-grid-item to="/account/like" icon-color="#3b82f6" icon="like" text="我的收藏" dot />
                         <van-grid-item to="/account/address" icon-color="#3b82f6" icon="wap-home" text="地址管理" />
                     </van-grid>
                 </div>
