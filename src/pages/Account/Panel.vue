@@ -1,74 +1,175 @@
 <template>
-    <van-nav-bar title="个人中心" />
-    <!-- 用户头像以及信息 -->
-    <van-row>
-        <van-col span="24">
-            <div>
-                <div class="max-w-sm rounded overflow-hidden shadow-lg">
-                    <div class="px-6 py-4">
-                        <div class="flex items-center">
-                            <img class=" w-24 h-24 rounded-full"
-                                src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" alt="Avatar" />
-                            <div class="ml-4">
-                                <div class="font-bold text-xl mb-2">
-                                    用户名:{{ userStore.user_info.username }}
-                                </div>
-                                <p class="text-gray-700 text-base">手机号: {{ userStore.user_info.tel }}</p>
-                                <p class="text-gray-700 text-base">身份: {{ userStore.user_info.roleName }}</p>
-                                <p class="text-gray-700 text-base">幸运日: {{ userStore.user_info.create_time }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <van-grid class="my-4" :column-num="3" clickable>
-                        <van-grid-item to="/account/order" icon-color="#3b82f6" icon="cart-circle" text="我的订单" dot />
-                        <van-grid-item to="/account/like" icon-color="#3b82f6" icon="like" text="我的收藏" dot />
-                        <van-grid-item to="/account/address" icon-color="#3b82f6" icon="wap-home" text="地址管理" />
-                    </van-grid>
-                </div>
+    <div class="profile-container">
+      <div class="profile-header">
+        <div class="profile-header-inner">
+          <div class="profile-info">
+            <van-image class="profile-info-avatar" round fit="cover" src="../other/avatar.png"></van-image>
+            <div class="profile-info-main">
+              <span class="profile-info-main-nickname">码农小易</span>
+              <span class="profile-info-main-phone">131****0000</span>
             </div>
-        </van-col>
-
-    </van-row>
-
-
-    <van-cell-group>
-        <template v-for="item, index in admin_routes">
-            <van-cell is-link :to="item.path" :key="index" :title="item.name"
-                v-if="item.isAdmin && userStore.user_info.roleCode === 'admin'" />
-        </template>
-        <van-cell title="修改资料" is-link to="/account/profile" />
-        <van-cell title="退出登录" is-link @click="click_logout" />
-    </van-cell-group>
-</template>
-
-<script lang='ts' setup>
-import { logout } from '@/api/user';
-import router from '@/router';
-import { useUserStore } from '@/stores/user';
-import { showNotify } from 'vant';
-import { admin_routes } from "@/router/admin";
-
-const userStore = useUserStore();
-
-const click_logout = async () => {
-    let res = await logout()
-    if (res) {
-        showNotify({ type: 'success', message: '退出成功' });
-        userStore.setDataEmpty();
-        router.push('/login');
+          </div>
+          <div class="profile-number">
+            <div class="profile-number-box">
+              <span class="profile-number-box-num">1,892</span>
+              <span class="profile-number-box-text">我的金币</span>
+            </div>
+            <div class="profile-number-box">
+              <span class="profile-number-box-num">212</span>
+              <span class="profile-number-box-text">今日金币</span>
+            </div>
+            <div class="profile-number-box">
+              <span class="profile-number-box-num">2.3</span>
+              <span class="profile-number-box-text">今日阅读(分钟)</span>
+            </div>
+          </div>
+        </div>
+        <GridCard class="profile-action-card" :items="ActionCard"></GridCard>
+        <GridCard :columnNum="3" title="系统专区" :items="SystemCard"></GridCard>
+      </div>
+    </div>
+  </template>
+  
+  <script setup >
+  import { reactive } from 'vue';
+  import GridCard from "@/pages/components/GridCard.vue"
+  
+  const SystemCard = [
+    {
+      text: '返回主页',
+      icon: 'home-o',
+      to: '/'
+    },
+    {
+      text: '在Github点赞',
+      icon: 'good-job-o',
+      url: 'https://github.com/Coder-XiaoYi/vue-mobile-template'
+    },
+    {
+      text: '在Gitee点赞',
+      icon: 'good-job-o',
+      url: 'https://gitee.com/liupeiqiang/vue-mobile-template'
     }
-}
-
-</script>
-<style scoped>
-.user_cell {
-    --tw-gradient-from: #3b82f6;
-    --tw-gradient-to: rgb(59 130 246 / 0);
-    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-    background: linear-gradient(to right, var(--tw-gradient-stops));
-}
-
-:root {
-    --van-grid-item-content-background: red !important;
-}
-</style>
+  ]
+  
+  const ActionCard = reactive({
+    Withdrawal: {
+      text: '兑换提现',
+      svg: 'Withdrawal'
+    },
+    Friend: {
+      text: '邀请好友',
+      svg: 'Friend'
+    },
+    Order: {
+      text: '我的订单',
+      svg: 'Order'
+    },
+    Profit: {
+      text: '收益明细',
+      svg: 'Profit'
+    }
+  })
+  
+  ActionCard.Order.dot = true;
+  ActionCard.Profit.badge = "9+";
+  
+  </script>
+  
+  <style lang="scss" scoped>
+  .profile-container {
+      height: 100%;
+      background-color: #f2f3f5;
+  
+    .profile-header {
+      overflow: hidden;
+  
+      &-inner {
+        position: relative;
+        width: 100%;
+        height: 240px;
+        z-index: 0;
+  
+        &:after {
+          width: 140%;
+          height: 240px;
+          position: absolute;
+          left: -20%;
+          top: 0;
+          z-index: -1;
+          content: '';
+          border-radius: 0 0 50% 50%;
+          background-color: #2f343e;
+        }
+  
+        .profile-info {
+  
+          height: 64px;
+          color: #fff;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding: 20px 20px 0px 20px;
+  
+  
+  
+          &-avatar {
+            border: 3px solid #aeb0b3;
+            width: 64px;
+            height: 64px;
+          }
+  
+          &-main {
+  
+            height: 100%;
+            padding: 0px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+  
+            &-nickname {
+              font-size: 20px;
+              font-weight: 500;
+            }
+  
+            &-phone {
+              font-size: 14px;
+              font-weight: 300;
+            }
+          }
+        }
+  
+        .profile-number {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          height: 50px;
+          padding: 20px 10px 0px 10px;
+          color: #fff;
+  
+          &-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            width: calc(100vh / 3);
+  
+            &-num {
+              font-size: 21px;
+              font-weight: 600;
+            }
+  
+            &-text {
+              font-size: 13px;
+            }
+          }
+        }
+      }
+  
+      .profile-action-card {
+        margin: -65px 20px 20px 20px;
+      }
+    }
+  
+  }
+  </style>

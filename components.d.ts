@@ -7,8 +7,11 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    GridCard: typeof import('./src/components/GridCard/index.vue')['default']
+    MsgList: typeof import('./src/components/MsgList/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SvgIcon: typeof import('./src/components/SvgIcon/index.vue')['default']
     VanActionSheet: typeof import('vant/es')['ActionSheet']
     VanAddressEdit: typeof import('vant/es')['AddressEdit']
     VanAddressList: typeof import('vant/es')['AddressList']
