@@ -18,11 +18,10 @@
       <BizForm @on-register="onRegister" :form-data="register_form" :is-register="true" :isUsePwd="true" />
     </div>
   </van-action-sheet>
-
 </template>
 
 <script lang='ts' setup>
-import {  ref } from 'vue';
+import { ref } from 'vue';
 import { showNotify } from 'vant';
 import 'vant/es/notify/style';
 import { loginWithPw, loginWithTel, register } from '@/api/user';
@@ -77,7 +76,7 @@ const onLoginWithPw = async (values: any) => {
   if (res) {
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
-    router.push('/account' )
+    router.push('/account')
   }
 };
 
@@ -86,7 +85,7 @@ const onLoginWithTel = async (values: any) => {
   if (res) {
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
-    router.push('/account' )
+    router.push('/account')
   }
 };
 

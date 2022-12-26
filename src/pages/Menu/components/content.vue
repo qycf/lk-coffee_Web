@@ -19,8 +19,6 @@ const router = useRouter()
 const show = ref(false)
 
 const props = defineProps(['goods_list'])
-const goods_list = ref(props.goods_list)
-console.log(goods_list.value);
 
 const goodsStore = useGoodsStore()
 const add_cart = (item: any) => {
