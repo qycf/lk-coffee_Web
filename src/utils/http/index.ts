@@ -51,8 +51,9 @@ class AxiosHttpRequest implements BaseType {
         const config = {
             baseURL: this.baseURL,
             timeout: this.timeout,
-            headers: {}
+            headers: {},
         }
+
         return config;
     }
     // 拦截设置
@@ -69,10 +70,13 @@ class AxiosHttpRequest implements BaseType {
             })
             // 添加全局的loading..
             // 请求头携带token
-
             let userStore = useUserStore()
+            config.data = true
             config.headers['lktoken'] = userStore.token
-            config.headers['Content-Type'] = 'application/json;charset=utf-8'
+            if (!config.headers['Content-Type']) {
+                config.headers['Content-Type'] = 'application/json;charset=utf-8'
+            }
+
 
             // get请求映射params参数
             if (config.method === 'get' && config.params) {
@@ -96,9 +100,10 @@ class AxiosHttpRequest implements BaseType {
                 config.params = {};
                 config.url = url;
             }
+
             return config
         }, (error: any) => {
-            
+
             return Promise.reject(error)
         })
 
