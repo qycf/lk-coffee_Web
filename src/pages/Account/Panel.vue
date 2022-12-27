@@ -4,10 +4,11 @@
       <div class="profile-header-inner">
         <div class="profile-info">
           <van-image class="profile-info-avatar" round fit="cover"
-            src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"></van-image>
+            :src="userStore.user_info.avatar || default_avatar"></van-image>
           <div class="profile-info-main">
             <span class="profile-info-main-nickname">{{ userStore.user_info.username }}</span>
-            <span class="profile-info-main-phone">{{ userStore.user_info.tel }}</span>
+            <span class="profile-info-main-phone my-1">{{ userStore.user_info.tel }}</span>
+            <span class="profile-info-main-phone">{{ userStore.user_info.detail || default_detail }}</span>
           </div>
         </div>
         <div class="profile-number mt-6">
@@ -23,7 +24,7 @@
         </div>
       </div>
       <GridCard class="profile-action-card" :items="ActionCard"></GridCard>
-      <GridCard :columnNum="3" title="系统专区" :items="SystemCard"></GridCard>
+      <GridCard :columnNum="3" :isSystemCard="true" title="系统专区" :items="SystemCard"></GridCard>
     </div>
   </div>
 </template>
@@ -34,7 +35,8 @@ import GridCard from "@/pages/components/GridCard.vue"
 import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore()
-
+const default_avatar = 'https://img.51miz.com/Element/00/88/08/86/716b81c7_E880886_bebe0ef3.png'
+const default_detail = '这个人很懒，没有签名。'
 const SystemCard = [
   {
     text: '账号管理',

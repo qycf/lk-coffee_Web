@@ -2,6 +2,8 @@ interface userInfo {
   id: number;
   username: string;
   tel: string;
+  avatar:string;
+  detail:string;
   roleName: string;
   roleCode: string;
   create_time: string;

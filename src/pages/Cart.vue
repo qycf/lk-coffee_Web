@@ -1,17 +1,18 @@
 <template>
-
-  <van-row class=" ">
-    <!-- 标题 -->
-    <van-col span="24">
-      <van-divider dashed :style="{ color: '#1989fa', borderColor: '#1989fa', padding: '0 16px' }">
-        购物袋
-      </van-divider>
-    </van-col>
-
+  <van-nav-bar fixed>
+    <template #title>
+      <div class=" font-bold">购物袋</div>
+      <!-- 收货地址 -->
+      <van-tag type="primary" @click="onClickLink" v-if="userStore.token">配送至：{{
+    addressStore.select_address.addressDetail ||
+    addressStore.user_address[0].address
+}}</van-tag>
+    </template>
+  </van-nav-bar>
+  <van-row>
     <!-- 商品-->
-    <van-col span="24" class="cart_list">
+    <van-col span="24" class="cart_list mt-12">
       <van-swipe-cell class="w-full mb-2 " v-for="(item, index) in cartStore.cart_list" :key="index">
-
         <van-card :thumb="item.thumb" :origin-price="item.origin_price">
           <template #title>
             <div class=" text-base font-bold text-black">{{ item.name }}</div>
@@ -33,16 +34,11 @@
           <van-button square @click="delete_good(item.id)" text="删除" type="danger" class="delete-button" />
         </template>
       </van-swipe-cell>
+      <van-empty v-if="cartStore.cart_list.length < 1" description="挑点好喝的装入购物袋" />
     </van-col>
-
     <van-col>
       <van-submit-bar class=" mb-16 bg-black" :price="(totalPrice * 100)" :disabled="disabled" button-text="提交订单"
         @submit="onSubmit">
-        <template #tip>
-          当前收获地址为 <span class=" text-black">{{ addressStore.select_address.addressDetail ||
-              addressStore.user_address[0].address
-          }}</span>, <span class=" text-blue-500" @click="onClickLink">点击修改</span>
-        </template>
       </van-submit-bar>
     </van-col>
   </van-row>
@@ -69,7 +65,7 @@ const onClickLink = () => {
 }
 
 const cartStore = useCartStore()
-
+const userStore = useUserStore()
 const disabled = ref(false)
 const delete_good = (id: number) => {
   cartStore.cart_list = cartStore.cart_list.filter((item) => item.id !== id)
@@ -79,9 +75,9 @@ const delete_good = (id: number) => {
 }
 
 const onSubmit = () => {
-  console.log( addressStore.select_address.id);
+  console.log(addressStore.select_address.id);
   let cart_order = ref([] as any)
-  if (!useUserStore().token) {
+  if (!userStore.token) {
     showNotify({ type: 'danger', message: '请先登录' });
     // 1秒后执行跳转登录
     setTimeout(() => {
@@ -98,18 +94,17 @@ const onSubmit = () => {
   })
   cart_order.value = {
     order_id,
-    address_id: addressStore.select_address.id|addressStore.user_address[0].id,
+    address_id: addressStore.select_address.id | addressStore.user_address[0].id,
     goods_list: order_goods.value,
     user_order: {
       order_id: order_id,
-      user_id: useUserStore().user_info.id
+      user_id: userStore.user_info.id
     },
     order_address: {
       order_id: order_id,
       address_id: addressStore.select_address.id
     }
   }
-console.log("cart_order.value",cart_order.value);
 
   putUserOrder(cart_order.value).then(res => {
     if (res.data.code != 200) {
@@ -169,6 +164,6 @@ const createordernum = () => {
 .cart_list {
   overflow: auto;
   width: -webkit-fill-available;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 160px);
 }
 </style>

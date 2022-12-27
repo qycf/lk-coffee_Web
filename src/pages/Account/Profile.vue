@@ -1,31 +1,21 @@
 <template>
-    <van-nav-bar title="个人资料" left-text="返回" :right-text="!isEdit ? '编辑' : '保存'" left-arrow @click-left="onClickLeft"
-        @click-right="onClickRight" />
+    <van-nav-bar title="个人资料" left-text="返回" left-arrow @click-left="onClickLeft" />
 
-    <van-form @submit="onSubmit">
-        <van-cell-group inset>
-            <van-cell icon="" title="头像" is-link value="内容" @click="(show = true)">
-                <van-image class="profile-info-avatar" round fit="cover"
-                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-            </van-cell>
+    <van-cell-group inset>
+        <van-cell icon="" title="头像" is-link value="内容" @click="(show = true)">
+            <van-image class="profile-info-avatar" round fit="cover"
+                src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+        </van-cell>
+        <van-cell title="手机号" is-link :value="userStore.user_info.tel" />
+        <van-cell title="用户名" is-link :value="userStore.user_info.username" />
+        <van-cell title="密码" is-link value="修改密码" />
+        <van-cell title="个性签名" is-link :value="userStore.user_info.detail || default_detail" />
 
-
-            <van-field input-align="right" v-model="userStore.user_info.tel" disabled name="手机号" label="手机号"
-                placeholder="手机号" />
-            <van-field input-align="right" v-model="userStore.user_info.username" disabled name="用户名" label="用户名"
-                placeholder="用户名" />
-            <van-field input-align="right" v-model="form.password" type="password" :disabled="!isEdit" name="密码"
-                label="密码" placeholder="密码" :rules="[{ required: true, message: '请填写密码' }]" />
-        </van-cell-group>
-
-    </van-form>
+    </van-cell-group>
 
     <van-action-sheet v-model:show="show" :actions="actions" cancel-text="取消" close-on-click-action
         @select="onSelect" />
-    <van-uploader ref="uploaderRef" :show-upload="false">
-
-    </van-uploader>
-
+    <van-uploader ref="uploaderRef" :show-upload="false" />
 </template>
 
 <script lang='ts' setup>
@@ -38,20 +28,17 @@ const uploaderRef = ref<UploaderInstance>();
 const userStore = useUserStore()
 const isEdit = ref(false);
 const show = ref(false)
+const default_detail = '这个人很懒，没有签名。'
 
 const actions = [
     { name: '点击上传', index: 1 },
     { name: '随机头像', index: 2 },
 ];
 const form = ref({
-    password: ''
+    password: '',
+    detail: ''
 });
-
-
 const onClickLeft = () => history.back();
-const onClickRight = () => {
-    isEdit.value = !isEdit.value;
-};
 
 const onSelect = () => {
     // 默认情况下点击选项时不会自动收起

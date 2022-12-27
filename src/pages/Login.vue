@@ -74,6 +74,7 @@ const onLogin = (values: any, is_LoginWithPw: boolean) => {
 const onLoginWithPw = async (values: any) => {
   let res = await loginWithPw(values)
   if (res) {
+    console.log(res);
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
     router.push('/account')
