@@ -3,7 +3,7 @@
     <template #title>
       <div class=" font-bold">购物袋</div>
       <!-- 收货地址 -->
-      <van-tag type="primary" @click="onClickLink" v-if="false">配送至：{{
+      <van-tag type="primary" @click="onClickLink" v-if="userStore.token">配送至：{{
     addressStore.select_address.addressDetail ||
     addressStore.user_address[0].address
 }}</van-tag>
@@ -12,6 +12,15 @@
   <van-row>
     <!-- 商品-->
     <van-col span="24" class="cart_list mt-12">
+      <van-dropdown-menu>
+        <van-dropdown-item v-model="value" :options="options" @change="value == 0 ? option2 = store : option2 = home">
+          <template #title>
+            <div>配送方式： <span class=" text-blue-400">{{ options[value].text }}</span></div>
+          </template>
+        </van-dropdown-item>
+        <van-dropdown-item v-model="value2" :options="option2" />
+      </van-dropdown-menu>
+
       <van-swipe-cell class="w-full mb-2 " v-for="(item, index) in cartStore.cart_list" :key="index">
         <van-card :thumb="item.thumb" :origin-price="item.origin_price">
           <template #title>
@@ -46,7 +55,7 @@
 </template>
 
 <script lang='ts' setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
@@ -61,8 +70,32 @@ const addressStore = useAddressStore()
 
 
 const onClickLink = () => {
-  router.push('/Account/address/?type=cart')
+  router.push('/Account/manage/address/?type=cart')
 }
+
+const item = ref(null);
+const value = ref(0);
+const value2 = ref(0);
+const switch1 = ref(false);
+const switch2 = ref(false);
+
+const options = [
+  { text: '到店取', value: 0 },
+  { text: '幸运送', value: 1 },
+];
+
+
+const store = [
+  { text: "万达1号店", value: 0 },
+  { text: "万象2号店", value: 1 }
+]
+const home = [
+  { text: "1", value: 0 },
+  { text: "2", value: 1 }
+]
+
+
+const option2 = ref(store)
 
 const cartStore = useCartStore()
 const userStore = useUserStore()

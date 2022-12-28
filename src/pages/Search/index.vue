@@ -6,7 +6,7 @@
     <van-row class="px-3" v-show="showTagList">
         <van-col class="py-1 mr-1" v-for="(item, index) in historyStore.keyword">
             <van-tag @click="onSearchTag(item)" :show="item.isShow" closeable :key="index" size="medium" type="primary"
-                @close="item.isShow = false">
+                @close="onClose(item)">
                 {{ item.name }}
             </van-tag>
         </van-col>
@@ -15,9 +15,6 @@
         <div data-aos="fade-down">
             <GoodsCard :goods_list="goods_list" :showAdd="true" @add_cart="add_cart"></GoodsCard>
         </div>
-        <van-dialog class="dialog" :showConfirmButton="false" v-model:show="show">
-            <Goods @closeDialog="closeDialog"></Goods>
-        </van-dialog>
     </template>
 
 </template>
@@ -26,17 +23,14 @@
 import { getGoodsByKeyword } from '@/api/goods';
 import router from '@/router';
 import { useGoodsStore } from '@/stores/goods';
-import GoodsCard from '@/pages/components/GoodsCard.vue';
-import Goods from '@/pages/Menu/components/goods.vue';
+import GoodsCard from '@/components/GoodsCard/index.vue';
 import { onMounted, ref } from 'vue';
 import { usehistoryStore } from '@/stores/history';
 
 const keyword = ref(router.currentRoute.value.query.keyword as string)
 const historyStore = usehistoryStore()
 
-const showTag = ref(true);
 const showTagList = ref(false);
-const onClose = () => showTag.value = false;
 const goods_list = ref()
 const goodsStore = useGoodsStore()
 const onSearch = async (value: any) => {
@@ -55,15 +49,16 @@ const onSearch = async (value: any) => {
     showTagList.value = false;
 
 }
-const show = ref(false)
-const closeDialog = () => {
-    show.value = false
-}
-
 const onSearchTag = (item: any) => {
     onSearch(item.name)
 
 }
+const onClose = (item: any) => {
+    console.log(item.name);
+
+    historyStore.clearKeyword(item)
+}
+
 const add_cart = (item: any) => {
     goodsStore.goods.name = item.title
     goodsStore.goods.price = item.price
@@ -74,7 +69,9 @@ const add_cart = (item: any) => {
     router.push({ path: '/detail/' + item.id })
 }
 
-const onCancel = () => history.back()
+const onCancel = () => {
+    router.push('/menu')
+}
 
 
 onMounted(() => {

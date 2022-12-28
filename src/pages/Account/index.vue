@@ -30,9 +30,13 @@
 </template>
   
 <script setup lang="ts">
-import { reactive } from 'vue';
-import GridCard from "@/components/GridCard/index.vue"
+
+import { onMounted, reactive } from 'vue';
 import { useUserStore } from '@/stores/user';
+import GridCard from "@/components/GridCard/index.vue";
+
+import { getUserAddress } from '@/api/address';
+import { useAddressStore } from '@/stores/address';
 
 const userStore = useUserStore()
 const default_avatar = 'https://img.51miz.com/Element/00/88/08/86/716b81c7_E880886_bebe0ef3.png'
@@ -44,6 +48,16 @@ const SystemCard = [
     to: '/account/profile'
   },
   {
+    text: '菜单管理',
+    icon: 'manager-o',
+    to: '/account/manage/menu'
+  },
+  {
+    text: '商品管理',
+    icon: 'manager-o',
+    to: '/account/manage/goods'
+  },
+  {
     text: '联系客服',
     icon: 'chat-o',
     url: 'https://github.com/Coder-XiaoYi/vue-mobile-template'
@@ -51,7 +65,7 @@ const SystemCard = [
   {
     text: '在Github点赞',
     icon: 'good-job-o',
-    url: 'https://github.com/Coder-XiaoYi/vue-mobile-template'
+    url: 'https://github.com/qycf/lk-coffee_Web'
   },
 ]
 
@@ -70,12 +84,20 @@ const ActionCard = reactive({
   Address: {
     text: '收获地址',
     svg: 'Address',
-    badge: '9',
+    badge: useAddressStore().user_address.length,
     to: '/account/manage/address'
   },
   Friend: {
     text: '邀请好友',
     svg: 'Friend'
+  }
+})
+
+
+onMounted(async () => {
+  let res = await getUserAddress()
+  if (res.data.data) {
+    useAddressStore().setAddress(res.data.data)
   }
 })
 </script>

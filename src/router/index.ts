@@ -61,7 +61,7 @@ const routes = [
   },
   {
     path: "/account/manage/order",
-    component: () => import("@/pages/Account/Order.vue"),
+    component: () => import("@/pages/Account/Manage/Order.vue"),
 
   },
   {
@@ -82,15 +82,6 @@ const routes = [
       }
     ]
   },
-  // {
-  //   path: "/manage",
-  //   component: () => import("@/pages/Account/Manage/index.vue"),
-  //   children: [
-  //     {
-
-  //     }
-  //   ]
-  // },
 ];
 
 // 路由参数配置

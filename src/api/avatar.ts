@@ -1,4 +1,5 @@
 import http from "@/utils/http";
+import axios from "axios";
 
 export const setRandomAvatar = () => {
     return http.request({
@@ -7,15 +8,3 @@ export const setRandomAvatar = () => {
     })
 }
 
-export const setAvatar = (file: any) => {
-    let params = new FormData()
-    params.append('file', file)
-    return http.request({
-        url: '/user/avatar',
-        method: 'POST',
-        params,
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    })
-}

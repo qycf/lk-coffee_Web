@@ -1,5 +1,5 @@
 <template>
-    <van-nav-bar title="商品管理" left-text="返回" right-text="新增" left-arrow @click-left="onClickLeft"
+    <van-nav-bar title="商品管理" left-text="返回" fixed right-text="新增" left-arrow @click-left="onClickLeft"
         @click-right="addGoods" />
 
 
@@ -191,6 +191,6 @@ onMounted(() => {
 .cart_list {
     overflow: auto;
     width: -webkit-fill-available;
-    height: 175vw;
+    height: calc(100vh - 70px);
 }
 </style>

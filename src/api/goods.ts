@@ -58,3 +58,10 @@ export const getGoodsByKeyword = (keyword: string) => {
     },
   });
 };
+
+export const getGoodsByRandom = () => {
+  return http.request({
+    url: "/goods/random",
+    method: "GET",
+  });
+};

@@ -110,8 +110,6 @@ const get_user_address = async () => {
         addressStore.setAddress(res.data.data)
     }
     chosenAddressId.value = 0
-    console.log(chosenAddressId.value);
-    
 }
 
 </script>

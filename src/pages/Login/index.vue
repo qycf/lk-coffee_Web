@@ -1,5 +1,5 @@
 <template>
-  <van-row >
+  <van-row>
     <van-col :span="24" class="welcome">
       <div class="ml-8">
         <div class=" text-5xl text-slate-800 my-auto">欢迎回来</div>
@@ -28,6 +28,8 @@ import { loginWithPw, loginWithTel, register } from '@/api/user';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
 import BizForm from '@/components/BizForm/index.vue';
+import { getUserAddress } from '@/api/address';
+import { useAddressStore } from '@/stores/address';
 
 const userStore = useUserStore()
 
@@ -63,7 +65,7 @@ const onRegister = async (values: any) => {
   router.push('/account')
 }
 
-const onLogin = (values: any, is_LoginWithPw: boolean) => {
+const onLogin = async (values: any, is_LoginWithPw: boolean) => {
   if (is_LoginWithPw) {
     onLoginWithPw(values)
   } else {
@@ -74,10 +76,10 @@ const onLogin = (values: any, is_LoginWithPw: boolean) => {
 const onLoginWithPw = async (values: any) => {
   let res = await loginWithPw(values)
   if (res) {
-    console.log(res);
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
     router.push('/account')
+
   }
 };
 
@@ -87,6 +89,7 @@ const onLoginWithTel = async (values: any) => {
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
     router.push('/account')
+
   }
 };
 
