@@ -20,63 +20,77 @@ const routes = [
         children: [
           {
             path: ":id",
-            component: () => import("@/pages/Menu/components/content.vue"),
+            component: () => import("@/components/GoodsList/index.vue"),
           },
           {
             path: "",
-            component: () => import("@/pages/Menu/components/content.vue"),
+            component: () => import("@/components/GoodsList/index.vue"),
           },
         ],
       },
       {
         path: "cart",
-        component: () => import("@/pages/Cart.vue"),
+        component: () => import("@/pages/Cart/index.vue"),
       },
-      { path: "login", component: () => import("@/pages/Login.vue") },
+      { path: "login", component: () => import("@/pages/Login/index.vue") },
       {
-        path: "/account",
+        path: "account",
         component: () => import("@/pages/Account/index.vue"),
-        children: [
-          {
-            path: "menumanage",
-            component: () => import("@/pages/admin/MenuManage.vue"),
-          },
-          {
-            path: "profile",
-            component: () => import("@/pages/Account/Profile.vue"),
-          },
-          {
-            path: "like",
-            component: () => import("@/pages/Account/Like.vue"),
-          },
-          {
-            path: "goodsmanage",
-            component: () => import("@/pages/admin/GoodsManage.vue"),
-          },
-          {
-            path: "",
-            component: () => import("@/pages/Account/Panel.vue"),
-          },
-          {
-            path: "order",
-            component: () => import("@/pages/Account/Order.vue"),
-          },
-          {
-            path: "address",
-            component: () => import("@/pages/Account/Address.vue"),
-          },
-        ],
       },
     ],
   },
   {
     path: "/detail/:id",
-    component: () => import("@/pages/components/Detail.vue"),
+    component: () => import("@/pages/Detail/index.vue"),
   },
   {
     path: "/search",
     component: () => import("@/pages/Search/index.vue"),
   },
+  {
+    path: "/account/manage/menu",
+    component: () => import("@/pages/Account/Manage/Menu.vue"),
+  },
+  {
+    path: "/account/manage/goods",
+    component: () => import("@/pages/Account/Manage/Goods.vue"),
+  },
+  {
+    path: "/account/manage/like",
+    component: () => import("@/pages/Account/Manage/Like.vue"),
+  },
+  {
+    path: "/account/manage/order",
+    component: () => import("@/pages/Account/Order.vue"),
+
+  },
+  {
+    path: "/account/manage/address",
+    component: () => import("@/pages/Account/Manage/Address.vue"),
+  },
+  {
+    path: "/account/profile",
+    component: () => import("@/pages/Account/Profile/index.vue"),
+    children: [
+      {
+        path: "edit",
+        component: () => import("@/components/ProfileEdit/index.vue"),
+      },
+      {
+        path: "",
+        component: () => import("@/pages/Account/Profile/Profile.vue"),
+      }
+    ]
+  },
+  // {
+  //   path: "/manage",
+  //   component: () => import("@/pages/Account/Manage/index.vue"),
+  //   children: [
+  //     {
+
+  //     }
+  //   ]
+  // },
 ];
 
 // 路由参数配置
@@ -88,11 +102,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-
-  if (to.path === "/login" && userStore.token) {
-    next("/" + userStore.user_info.roleCode);
-    return;
-  }
 
   if (to.path === "/account") {
     if (userStore.token) {

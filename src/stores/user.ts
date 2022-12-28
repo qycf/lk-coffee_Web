@@ -29,9 +29,23 @@ export const useUserStore = defineStore("user", {
       oldDefaultAddress.isDefault = false;
       this.user_address.push(oldDefaultAddress);
     },
+    update(value: never, type: string) {
+      if (isValidKey(type, this.user_info)) {
+        this.user_info[type] = value;
+      }
+    }
   },
   persist: [
     { paths: ["token", "user_info"], storage: localStorage },
     { paths: ["user_address", "default_address"], storage: sessionStorage },
   ],
-});
+}
+);
+
+export function isValidKey(
+  key: string | number | symbol,
+  object: object
+): key is keyof typeof object {
+  return key in object;
+}
+

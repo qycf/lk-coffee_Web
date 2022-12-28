@@ -38,3 +38,14 @@ export const loginWithPw = (data: object) => {
     data,
   });
 };
+
+
+export const updateProfile = (value: string, type: string) => {
+  return http.request({
+    url: "/user/update/" + type,
+    method: "POST",
+    params: {
+      value
+    }
+  });
+}

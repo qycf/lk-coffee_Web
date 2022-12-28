@@ -2,17 +2,16 @@
   <div data-aos="fade-down">
     <GoodsCard :goods_list="props.goods_list" :showAdd="true" @add_cart="add_cart"></GoodsCard>
   </div>
-  <van-dialog class="dialog" :showConfirmButton="false" v-model:show="show">
+  <!-- <van-dialog class="dialog" :showConfirmButton="false" v-model:show="show">
     <Goods @closeDialog="closeDialog"></Goods>
-  </van-dialog>
+  </van-dialog> -->
 </template>
 
 <script lang='ts' setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Goods from './goods.vue';
-import { useGoodsStore } from '../../../stores/goods'
-import GoodsCard from '@/pages/components/GoodsCard.vue';
+import { useGoodsStore } from '@/stores/goods'
+import GoodsCard from '@/components/GoodsCard/index.vue';
 
 const router = useRouter()
 

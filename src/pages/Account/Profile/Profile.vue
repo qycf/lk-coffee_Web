@@ -6,10 +6,10 @@
             <van-image class="profile-info-avatar" round fit="cover"
                 :src="userStore.user_info.avatar || default_avatar" />
         </van-cell>
-        <van-cell title="手机号" is-link :value="userStore.user_info.tel" />
-        <van-cell title="用户名" is-link :value="userStore.user_info.username" />
-        <van-cell title="密码" is-link value="修改密码" />
-        <van-cell title="个性签名" is-link :value="userStore.user_info.detail || default_detail" />
+        <van-cell title="手机号" is-link to="/account/profile/edit?type=tel" :value="userStore.user_info.tel" />
+        <van-cell title="用户名" is-link to="/account/profile/edit?type=username" :value="userStore.user_info.username" />
+        <van-cell title="密码" is-link to="/account/profile/edit?type=password" value="修改密码" />
+        <van-cell title="个性签名" is-link to="/account/profile/edit?type=detail" :value="userStore.user_info.detail || default_detail" />
 
     </van-cell-group>
 
@@ -84,8 +84,6 @@ const afterRead = async (file: any) => {	//文件读取完成后的回调函数
         showNotify({ type: 'success', message: '头像设置成功' });
     }
 }
-
-
 
 
 </script>

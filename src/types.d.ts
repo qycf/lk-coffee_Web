@@ -2,14 +2,14 @@ interface userInfo {
   id: number;
   username: string;
   tel: string;
-  avatar:string;
-  detail:string;
+  avatar: string;
+  detail: string;
   roleName: string;
   roleCode: string;
   create_time: string;
 }
 
-interface goodsLike{
+interface goodsLike {
   goods_id: number;
   user_id: number;
 }
@@ -60,12 +60,12 @@ interface address {
 // areaCode	地区编码，通过 省市区选择 获取（必填）	string
 // isDefault	是否为默认地址	boolean
 
-interface addressInfo{
-  name:string;
-  province:string;
-  city:string;
-  county:string;
-  addressDetail:string;
-  areaCode:string
-  isDefault:boolean
+interface addressInfo {
+  name: string;
+  province: string;
+  city: string;
+  county: string;
+  addressDetail: string;
+  areaCode: string
+  isDefault: boolean
 }

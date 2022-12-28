@@ -1,5 +1,5 @@
 <template>
-  <van-row class="mt-24">
+  <van-row >
     <van-col :span="24" class="welcome">
       <div class="ml-8">
         <div class=" text-5xl text-slate-800 my-auto">欢迎回来</div>
@@ -27,7 +27,7 @@ import 'vant/es/notify/style';
 import { loginWithPw, loginWithTel, register } from '@/api/user';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
-import BizForm from './components/BizForm.vue';
+import BizForm from '@/components/BizForm/index.vue';
 
 const userStore = useUserStore()
 

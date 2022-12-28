@@ -3,7 +3,7 @@
     <template #title>
       <div class=" font-bold">购物袋</div>
       <!-- 收货地址 -->
-      <van-tag type="primary" @click="onClickLink" v-if="userStore.token">配送至：{{
+      <van-tag type="primary" @click="onClickLink" v-if="false">配送至：{{
     addressStore.select_address.addressDetail ||
     addressStore.user_address[0].address
 }}</van-tag>
@@ -47,9 +47,9 @@
 
 <script lang='ts' setup>
 import { computed, onMounted, ref } from 'vue';
-import { useCartStore } from '../stores/cart';
-import { useUserStore } from '../stores/user';
-import router from '../router';
+import { useCartStore } from '@/stores/cart';
+import { useUserStore } from '@/stores/user';
+import router from '@/router';
 // Toast
 import { showNotify } from 'vant';
 import 'vant/es/notify/style';

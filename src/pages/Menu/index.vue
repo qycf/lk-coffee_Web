@@ -14,12 +14,14 @@
         <div class="menu_list">
             <van-sidebar v-model="(active as any)" @change="onClcick">
                 <van-sidebar-item replace v-for="(item, index) in menuList" :key="index" :title="item.title"
-                    :dot="item.dot" :to="{ path: '/menu', query: { mid: item.id }                                                        }" :badge="item.badge" />
+                    :dot="item.dot"
+                    :to="{ path: '/menu', query: { mid: item.id } }"
+                    :badge="item.badge" />
             </van-sidebar>
         </div>
         <!-- 右侧菜单 -->
         <div id="goodListId" v-if="goods_list">
-            <Content :goods_list="goods_list" />
+            <GoodsList :goods_list="goods_list" />
             <!-- <router-view :key="router.currentRoute.value.fullPath"></router-view> -->
         </div>
     </div>
@@ -32,7 +34,7 @@ import { useRouter } from 'vue-router';
 import { useMenuStore } from '@/stores/menus';
 import { getGoodsListByMenuId } from '@/api/goods';
 import { getMenuList } from '@/api/menu';
-import Content from './components/content.vue';
+import GoodsList from '@/components/GoodsList/index.vue';
 
 const router = useRouter()
 const menuStore = useMenuStore()
