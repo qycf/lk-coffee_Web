@@ -4,7 +4,8 @@
             <van-cell icon="location-o" size="large" title-style="margin:-1px;font-color:black;margin-buttom:5px">
                 <template #title class="ml-4">
                     <span class=" text-base mt-4">{{ item.address_detail }}</span>
-                    <span class=" float-right  text-sm font-sans text-gray-500">已完成</span>
+                    <span class=" float-right  text-sm font-sans text-gray-500">{{ item.status == 1 ? '已完成' : '进行中'
+}}</span>
                     <van-divider class="divider" />
                 </template>
                 <template #label>
@@ -28,11 +29,12 @@
                             <van-col span="15">
                                 {{ item.create_time }}
                                 <div class=" text-xs">单号:{{ item.orderId }}</div>
-
                             </van-col>
                             <van-col class=" text-black" span="8">合计：{{ getOrderPrice(item.goods_list)
-                                }}元</van-col>
+}}元</van-col>
                         </van-row>
+                        <van-button class="mx-4 float-right" v-if="item.status == 0" @click="onDon(item)" type="primary"
+                            size="small">确认收货</van-button>
                     </div>
                 </template>
             </van-cell>
@@ -41,19 +43,40 @@
     </div>
 </template>
 <script setup lang="ts">
+import { setUserOrderDone } from '@/api/order';
+import { showConfirmDialog } from 'vant';
+import 'vant/es/dialog/style';
 
 const props = defineProps(['order_list'])
 
 const getOrderPrice = (item: any) => {
     let price = 0
     item.forEach((item: any) => {
-
+        price += item.price * item.count
     })
     return price
 }
+
+const onDon = (item: any) => {
+    showConfirmDialog({
+        title: '确认收获？',
+        message:
+            '确认收货后，如有问题请联系客服',
+    })
+        .then(async () => {
+            let res = await setUserOrderDone(item.orderId)
+            if (res) {
+                item.status = 1
+            }
+        })
+        .catch(() => {
+            // on cancel
+        });
+
+}
+
 </script>
 <style scoped>
-
 .card_foot .van-divider {
     display: flex;
     align-items: center;
@@ -65,6 +88,7 @@ const getOrderPrice = (item: any) => {
     border-style: dashed;
     border-width: 0;
 }
+
 .van-card {
     background-color: #fff;
 }

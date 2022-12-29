@@ -3,7 +3,7 @@
     <template #title>
       <div class=" font-bold">购物袋</div>
       <!-- 收货地址 -->
-      <van-tag type="primary" @click="onClickLink" v-if="userStore.token">配送至：{{
+      <van-tag type="primary" @click="onClickLink" v-if="addressStore.user_address.length>0">配送至：{{
     addressStore.select_address.addressDetail ||
     addressStore.user_address[0].address
 }}</van-tag>
@@ -12,15 +12,6 @@
   <van-row>
     <!-- 商品-->
     <van-col span="24" class="cart_list mt-12">
-      <van-dropdown-menu>
-        <van-dropdown-item v-model="value" :options="options" @change="value == 0 ? option2 = store : option2 = home">
-          <template #title>
-            <div>配送方式： <span class=" text-blue-400">{{ options[value].text }}</span></div>
-          </template>
-        </van-dropdown-item>
-        <van-dropdown-item v-model="value2" :options="option2" />
-      </van-dropdown-menu>
-
       <van-swipe-cell class="w-full mb-2 " v-for="(item, index) in cartStore.cart_list" :key="index">
         <van-card :thumb="item.thumb" :origin-price="item.origin_price">
           <template #title>
@@ -55,7 +46,7 @@
 </template>
 
 <script lang='ts' setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
@@ -64,7 +55,8 @@ import { showNotify } from 'vant';
 import 'vant/es/notify/style';
 import { putUserOrder } from '@/api/order';
 import { useAddressStore } from '@/stores/address';
-
+import type { DropdownItemOption } from 'vant';
+import { hostname } from 'os';
 
 const addressStore = useAddressStore()
 
@@ -73,29 +65,8 @@ const onClickLink = () => {
   router.push('/Account/manage/address/?type=cart')
 }
 
-const item = ref(null);
-const value = ref(0);
-const value2 = ref(0);
-const switch1 = ref(false);
-const switch2 = ref(false);
-
-const options = [
-  { text: '到店取', value: 0 },
-  { text: '幸运送', value: 1 },
-];
 
 
-const store = [
-  { text: "万达1号店", value: 0 },
-  { text: "万象2号店", value: 1 }
-]
-const home = [
-  { text: "1", value: 0 },
-  { text: "2", value: 1 }
-]
-
-
-const option2 = ref(store)
 
 const cartStore = useCartStore()
 const userStore = useUserStore()
@@ -108,7 +79,6 @@ const delete_good = (id: number) => {
 }
 
 const onSubmit = () => {
-  console.log(addressStore.select_address.id);
   let cart_order = ref([] as any)
   if (!userStore.token) {
     showNotify({ type: 'danger', message: '请先登录' });
@@ -127,7 +97,7 @@ const onSubmit = () => {
   })
   cart_order.value = {
     order_id,
-    address_id: addressStore.select_address.id | addressStore.user_address[0].id,
+    address_id: addressStore.select_address.id || addressStore.user_address[0].id,
     goods_list: order_goods.value,
     user_order: {
       order_id: order_id,
@@ -135,10 +105,9 @@ const onSubmit = () => {
     },
     order_address: {
       order_id: order_id,
-      address_id: addressStore.select_address.id
+      address_id: addressStore.select_address.id || addressStore.user_address[0].id
     }
   }
-
   putUserOrder(cart_order.value).then(res => {
     if (res.data.code != 200) {
       showNotify({ type: 'danger', message: '提交订单失败' });
@@ -174,6 +143,7 @@ const createordernum = () => {
   let seconds = setTimeDateFmt(now.getSeconds())
   return now.getFullYear().toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 1000000)).toString();
 }
+
 
 
 </script>

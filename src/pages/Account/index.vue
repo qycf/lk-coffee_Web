@@ -17,7 +17,7 @@
             <span class="profile-number-box-text">累计订单</span>
           </div>
           <div class="profile-number-box">
-            <span class="profile-number-box-num">212</span>
+            <span class="profile-number-box-num">￥{{ today_expend }}</span>
             <span class="profile-number-box-text">今日消费</span>
           </div>
 
@@ -31,15 +31,17 @@
   
 <script setup lang="ts">
 
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import GridCard from "@/components/GridCard/index.vue";
 
 import { getUserAddress } from '@/api/address';
 import { useAddressStore } from '@/stores/address';
+import { getUserTodayExpend } from '@/api/user';
 
 const userStore = useUserStore()
 const default_avatar = 'https://img.51miz.com/Element/00/88/08/86/716b81c7_E880886_bebe0ef3.png'
+const today_expend = ref()
 const default_detail = '这个人很懒，没有签名。'
 const SystemCard = [
   {
@@ -98,6 +100,10 @@ onMounted(async () => {
   let res = await getUserAddress()
   if (res.data.data) {
     useAddressStore().setAddress(res.data.data)
+  }
+  let expend = await getUserTodayExpend()
+  if (expend) {
+    today_expend.value = expend.data.data
   }
 })
 </script>

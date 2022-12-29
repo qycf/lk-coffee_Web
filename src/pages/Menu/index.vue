@@ -12,17 +12,15 @@
     <div class="menu_detail">
         <!-- 左侧菜单 -->
         <div class="menu_list">
-            <van-sidebar v-model="(active as any)" @change="onClcick">
-                <van-sidebar-item replace v-for="(item, index) in menuList" :key="index" :title="item.title"
-                    :dot="item.dot"
-                    :to="{ path: '/menu', query: { mid: item.id } }"
+            <van-sidebar v-model="(active as any)" replace>
+                <van-sidebar-item replace v-for="(item, index) in menuList" @click="onClcick(item)" :index="item.id"
+                    :title="item.title" :dot="item.dot" :to="{ path: '/menu', query: { mid: item.mid, cid: item.id } }"
                     :badge="item.badge" />
             </van-sidebar>
         </div>
         <!-- 右侧菜单 -->
         <div id="goodListId" v-if="goods_list">
             <GoodsList :goods_list="goods_list" />
-            <!-- <router-view :key="router.currentRoute.value.fullPath"></router-view> -->
         </div>
     </div>
 
@@ -38,26 +36,37 @@ import GoodsList from '@/components/GoodsList/index.vue';
 
 const router = useRouter()
 const menuStore = useMenuStore()
-
-const menuList = ref()
-const goods_list = ref()
 const active = ref(router.currentRoute.value.query.mid || 0);
+// 定义menuList为list类型
+const menuList = ref([] as any)
 
-const onClcick = async () => {
-    goods_list.value = await (await getGoodsListByMenuId(active.value as any)).data.data;
+
+const goods_list = ref()
+
+
+const onClcick = async (item: any) => {
+    let res = await getGoodsListByMenuId(item.id)
+    if (res) {
+        goods_list.value = res.data.data
+    } else {
+        goods_list.value = []
+    }
 }
 
 
 onMounted(async () => {
-    if (!menuStore.menu_list.length) {
-        let res = await getMenuList();
+    let res = await getMenuList();
+    if (res) {
         menuStore.setMenuList(res.data.data)
         menuList.value = res.data.data
-    } else {
-        menuList.value = menuStore.menu_list
+        let list_res = await getGoodsListByMenuId(router.currentRoute.value.query.cid as unknown as number || 0)
+        if (list_res) {
+            goods_list.value = list_res.data.data
+        }
     }
-    goods_list.value = await (await getGoodsListByMenuId(active.value as any)).data.data;
 })
+
+
 
 </script>
 

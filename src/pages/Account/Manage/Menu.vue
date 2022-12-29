@@ -1,19 +1,6 @@
 <template>
     <van-nav-bar title="菜单管理" left-text="返回" right-text="新增" left-arrow @click-left="onClickLeft"
         @click-right="onClickRight" />
-
-    <!-- <van-form @submit="onSubmit" class="mt-24">
-        <van-cell-group inset>
-            <van-field v-model="menu_name" name="menu_name" label="菜单名" placeholder="请输入菜单名"
-                :rules="[{ required: true, message: '请填写用户名' }]" />
-            <van-field v-model="menu_path" name="path" label="别名" placeholder="请输入别名" />
-        </van-cell-group>
-        <div style="margin: 16px margin-top:5rem;">
-            <van-button round block type="primary" native-type="submit">
-                提交
-            </van-button>
-        </div>
-    </van-form> -->
     <van-cell-group>
         <van-cell class="mb-2" value="路径" size="large">
             <template #title>
@@ -78,13 +65,12 @@ const onClickRight = () => {
 
 };
 
-const onSubmit = async (values: any) => {
-    let res = await addMenu(values);
+const onSubmit = async () => {
+    let res = await addMenu(menu_form.value);
     if (res) {
         showNotify({ type: 'success', message: '菜单编辑成功' });
         let menuList = await getMenuList();
         menu_list.value = menuList.data.data
-        menuStore.menu_list.push(values);
         show.value = false;
     }
 };
@@ -113,6 +99,8 @@ onMounted(async () => {
     let res = await getMenuList();
     if (res) {
         menu_list.value = res.data.data;
+        console.log(menu_list.value);
+        
     }
 });
 

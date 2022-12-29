@@ -49,3 +49,10 @@ export const updateProfile = (value: string, type: string) => {
     }
   });
 }
+
+export const getUserTodayExpend = () => {
+  return http.request({
+    url: "/user/expend",
+    method: "GET",
+  });
+}

@@ -3,46 +3,39 @@
     <div id="order" v-if="order_list">
         <div class="cart_list mt-14">
             <van-tabs v-model:active="active" sticky offset-top="2.9rem" animated type="line" @click-tab="onClickTab">
-                <van-tab title="全部">
+                <van-tab title="全部" name="">
                     <OrderCard class="mt-4" :order_list="order_list" />
                 </van-tab>
-                <van-tab title="门店订单">门店订单</van-tab>
-                <van-tab title="外卖订单">外卖订单</van-tab>
+                <van-tab title="进行中" name="0">
+                    <OrderCard class="mt-4" :order_list="order_list" />
+                </van-tab>
+                <van-tab title="已完成" name="1">
+                    <OrderCard class="mt-4" :order_list="order_list" />
+                </van-tab>
             </van-tabs>
-           
         </div>
     </div>
-
-
-
 </template>
 
 <script lang='ts' setup>
 import { getUserOrder } from '@/api/order';
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 const order_list = ref()
 const active = ref(0)
 
-const onClickTab = (name: any, title: any) => {
-    console.log(name, title);
-    console.log(active.value);
-
+const onClickTab = (item: any) => {
+    getUserOrderList(item.name as number)
 }
 
-const getUserOrderList = async () => {
-    const res = await getUserOrder()
+const getUserOrderList = async (status?: number) => {
+    const res = await getUserOrder(status)
     if (res.data.data.order_count > 0) {
         order_list.value = res.data.data.order_list
+    }else{
+        order_list.value = []
     }
 }
 
-const getOrderPrice = (item: any) => {
-    let price = 0
-    item.forEach((item: any) => {
-        price += item.price * item.count
-    })
-    return price
-}
 
 onMounted(() => {
     getUserOrderList()
@@ -65,8 +58,4 @@ const onClickLeft = () => history.back();
     background-color: rgb(245, 245, 245);
     height: 100%
 }
-
-
-
-
 </style>
