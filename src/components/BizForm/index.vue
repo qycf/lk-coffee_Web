@@ -9,7 +9,7 @@
 
             <PwdField v-if="isUsePwd || (isUsePwd && isReg)" :password="formData.password" />
 
-            <CodeField v-if="(isReg || !isUsePwd)" :verify_code="formData.verify_code" :tel="formData.tel" />
+            <CodeField v-if="(isReg || !isUsePwd)" :verify_code="formData.verify_code" :tel="formData.tel" :is-register="isRegister"  />
 
         </van-cell-group>
 

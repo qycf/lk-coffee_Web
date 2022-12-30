@@ -23,6 +23,7 @@
 <script setup lang='ts'>
 import { logout } from '@/api/user';
 import router from '@/router';
+import { useAddressStore } from '@/stores/address';
 import { useUserStore } from '@/stores/user';
 import { showNotify } from 'vant';
 
@@ -53,13 +54,14 @@ const props = defineProps({
 const userStore = useUserStore()
 
 
-const onLogout = async () => {
-    let res = await logout()
-    if (res) {
+const onLogout = () => {
+    logout().then(res => {
         showNotify({ type: 'success', message: '退出成功' });
         userStore.setDataEmpty();
+        useAddressStore().setDataEmpty();
         router.push('/login');
-    }
+    })
+
 }
 </script>
 <style lang="scss" scoped>

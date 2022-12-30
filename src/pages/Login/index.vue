@@ -28,8 +28,6 @@ import { loginWithPw, loginWithTel, register } from '@/api/user';
 import { useUserStore } from '@/stores/user';
 import router from '@/router';
 import BizForm from '@/components/BizForm/index.vue';
-import { getUserAddress } from '@/api/address';
-import { useAddressStore } from '@/stores/address';
 
 const userStore = useUserStore()
 
@@ -56,13 +54,12 @@ const register_form = ref({
 })
 
 
-
-const phoneNumberValidator = (val: string) => /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(val);
-
-const onRegister = async (values: any) => {
-  let res = await register(values)
-  userStore.setUser(res.data.token, res.data.user_info)
-  router.push('/account')
+const onRegister = (values: any) => {
+  register(values).then(res => {
+    showNotify({ type: 'success', message: '注册成功' });
+    userStore.setUser(res.data.data.token, res.data.data.user_info)
+    router.push('/account')
+  })
 }
 
 const onLogin = async (values: any, is_LoginWithPw: boolean) => {
@@ -73,24 +70,20 @@ const onLogin = async (values: any, is_LoginWithPw: boolean) => {
   }
 }
 
-const onLoginWithPw = async (values: any) => {
-  let res = await loginWithPw(values)
-  if (res) {
+const onLoginWithPw = (values: any) => {
+  loginWithPw(values).then(res => {
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
     router.push('/account')
-
-  }
+  })
 };
 
-const onLoginWithTel = async (values: any) => {
-  let res = await loginWithTel(values)
-  if (res) {
+const onLoginWithTel = (values: any) => {
+  loginWithTel(values).then(res => {
     userStore.setUser(res.data.data.token, res.data.data.user_info)
     showNotify({ type: 'success', message: '登录成功' });
     router.push('/account')
-
-  }
+  })
 };
 
 

@@ -17,7 +17,7 @@
             <span class="profile-number-box-text">累计订单</span>
           </div>
           <div class="profile-number-box">
-            <span class="profile-number-box-num">￥{{ today_expend }}</span>
+            <span class="profile-number-box-num">￥{{ today_expend || 0 }}</span>
             <span class="profile-number-box-text">今日消费</span>
           </div>
 
@@ -43,21 +43,11 @@ const userStore = useUserStore()
 const default_avatar = 'https://img.51miz.com/Element/00/88/08/86/716b81c7_E880886_bebe0ef3.png'
 const today_expend = ref()
 const default_detail = '这个人很懒，没有签名。'
-const SystemCard = [
+const SystemCard = reactive([
   {
     text: '账号管理',
     icon: 'manager-o',
     to: '/account/profile'
-  },
-  {
-    text: '菜单管理',
-    icon: 'manager-o',
-    to: '/account/manage/menu'
-  },
-  {
-    text: '商品管理',
-    icon: 'manager-o',
-    to: '/account/manage/goods'
   },
   {
     text: '联系客服',
@@ -69,7 +59,7 @@ const SystemCard = [
     icon: 'good-job-o',
     url: 'https://github.com/qycf/lk-coffee_Web'
   },
-]
+])
 
 const ActionCard = reactive({
   Like: {
@@ -97,6 +87,19 @@ const ActionCard = reactive({
 
 
 onMounted(async () => {
+  if (userStore.user_info.roleCode == "admin") {
+    console.log('管理员');
+    SystemCard.unshift({
+      text: '菜单管理',
+      icon: 'manager-o',
+      to: '/account/manage/menu'
+    }, {
+      text: '商品管理',
+      icon: 'manager-o',
+      to: '/account/manage/goods'
+    })
+  }
+
   let res = await getUserAddress()
   if (res.data.data) {
     useAddressStore().setAddress(res.data.data)

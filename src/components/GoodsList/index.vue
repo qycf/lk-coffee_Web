@@ -13,7 +13,6 @@ const router = useRouter()
 
 
 const props = defineProps(['goods_list'])
-console.log(props.goods_list);
 
 
 const goodsStore = useGoodsStore()

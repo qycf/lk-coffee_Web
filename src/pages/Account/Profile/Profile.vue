@@ -23,7 +23,6 @@
 import { useUserStore } from '@/stores/user';
 import { ref } from 'vue';
 import type { UploaderInstance } from 'vant';
-import http from '@/utils/http';
 import axios from 'axios';
 import { setRandomAvatar } from '@/api/avatar';
 import { showNotify } from 'vant';
@@ -32,7 +31,6 @@ import 'vant/es/notify/style';
 const uploaderRef = ref<UploaderInstance>();
 
 const userStore = useUserStore()
-const isEdit = ref(false);
 const show = ref(false)
 const default_avatar = 'https://img.51miz.com/Element/00/88/08/86/716b81c7_E880886_bebe0ef3.png'
 const default_detail = '这个人很懒，没有签名。'
@@ -84,7 +82,6 @@ const afterRead = async (file: any) => {	//文件读取完成后的回调函数
         showNotify({ type: 'success', message: '头像设置成功' });
     }
 }
-
 
 </script>
 <style scoped>

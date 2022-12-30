@@ -23,6 +23,13 @@ export const useAddressStore = defineStore("address", {
       oldDefaultAddress.isDefault = false;
       this.user_address.push(oldDefaultAddress);
     },
+    setDataEmpty() {
+      this.user_address = [];
+      this.select_address = {
+        addressDetail: "",
+        id: 0,
+      };
+    }
   },
   persist: [
     {

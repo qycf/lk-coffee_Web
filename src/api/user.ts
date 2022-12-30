@@ -8,13 +8,6 @@ export const loginWithTel = (data: object) => {
   });
 };
 
-export const login = (data: object) => {
-  return http.request({
-    url: "/lkcoffee/user",
-    method: "POST",
-    data,
-  });
-};
 
 export const register = (data: object) => {
   return http.request({
