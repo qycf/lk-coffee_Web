@@ -4,6 +4,10 @@ lk-coffee 是一个仿写瑞幸咖啡小程序的项目。使用了最新的`vue
 
 ## 安装使用
 
+#### 后端
+
+**[lk-coffee_Server](https://github.com/qycf/lk-coffee_Server)**
+
 #### 前端
 
 - 安装依赖
