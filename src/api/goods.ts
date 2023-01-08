@@ -65,3 +65,10 @@ export const getGoodsByRandom = () => {
     method: "GET",
   });
 };
+
+export const getGoodsById = (id: number) => {
+  return http.request({
+    url: "/goods/" + id,
+    method: "GET",
+  });
+}

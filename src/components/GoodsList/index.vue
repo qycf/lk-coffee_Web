@@ -1,6 +1,6 @@
 <template>
   <div data-aos="fade-down">
-    <GoodsCard :goods_list="props.goods_list" :showAdd="true" @add_cart="add_cart"></GoodsCard>
+    <GoodsCard :goods_list="props.goods_list" :showAdd="true" ></GoodsCard>
   </div>
 </template>
 
@@ -16,15 +16,6 @@ const props = defineProps(['goods_list'])
 
 
 const goodsStore = useGoodsStore()
-const add_cart = (item: any) => {
-  goodsStore.goods.name = item.title
-  goodsStore.goods.price = item.price
-  goodsStore.thumb = item.thumb
-  goodsStore.detail = item.detail
-  goodsStore.id = item.id
-  goodsStore.goods.originPrice = item.originPrice
-  router.push({ path: '/detail/' + item.id })
-}
 
 
 </script>

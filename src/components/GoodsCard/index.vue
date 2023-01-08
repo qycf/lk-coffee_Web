@@ -2,7 +2,7 @@
     <van-card v-if="props.goods_list" v-for="(item, index) in props.goods_list" :desc="item.detail"
         :origin-price="item.originPrice" :thumb="item.thumb" :key="index">
         <template #price-top v-if="showAdd">
-            <van-button @click="emit('add_cart', item)" class="float-right add_button" icon="plus" size="small" round
+            <van-button @click="$router.push({ path: '/detail/' + item.id })" class="float-right add_button" icon="plus" size="small" round
                 type="primary"></van-button>
         </template>
         <template #price-top v-if="props.isEdit">
@@ -20,7 +20,7 @@
 
 <script lang='ts' setup>
 const props = defineProps(['goods_list', 'showAdd', 'isEdit'])
-const emit = defineEmits(['add_cart', 'edit_goods'])
+const emit = defineEmits(['edit_goods'])
 
 </script>
 <style scoped>
